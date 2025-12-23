@@ -1,14 +1,30 @@
-import React from 'react';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 
-const LeadsTable = ({ leads, filter, onFilterChange }) => {
+const LeadsTable = ({ leads, filter, onFilterChange, onDelete }) => {
+  const [deleting, setDeleting] = useState(null);
+
   const filteredLeads = (leads || []).filter(lead => {
     if (filter === 'all') return true;
     return lead.status === filter;
   });
 
+  const handleDelete = async (leadId, leadName) => {
+    if (!window.confirm(`Are you sure you want to delete "${leadName}"?`)) return;
+    
+    setDeleting(leadId);
+    try {
+      await onDelete(leadId);
+    } catch (error) {
+      console.error('Error deleting lead:', error);
+      alert('Failed to delete lead');
+    } finally {
+      setDeleting(null);
+    }
+  };
+
   return (
-    <div  style={{ background: 'white', borderRadius: '12px', padding: '30px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+    <div style={{ background: 'white', borderRadius: '12px', padding: '30px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>Leads</h2>
         
@@ -72,6 +88,7 @@ const LeadsTable = ({ leads, filter, onFilterChange }) => {
                 <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Confidence</th>
                 <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Status</th>
                 <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Synced</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +99,7 @@ const LeadsTable = ({ leads, filter, onFilterChange }) => {
                   <td style={{ padding: '12px' }}>
                     {(() => {
                       const raw = Number(lead.probability) || 0;
-                      const p = raw > 1 ? raw / 100 : raw; // normalize if stored as percent
+                      const p = raw > 1 ? raw / 100 : raw;
                       const pct = (p * 100).toFixed(1);
                       const isHigh = p >= 0.6;
                       return (
@@ -121,6 +138,35 @@ const LeadsTable = ({ leads, filter, onFilterChange }) => {
                     ) : (
                       <span style={{ color: '#9ca3af' }}>Pending</span>
                     )}
+                  </td>
+                  <td style={{ padding: '12px' }}>
+                    <button
+                      onClick={() => handleDelete(lead._id, lead.name)}
+                      disabled={deleting === lead._id}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: deleting === lead._id ? '#9ca3af' : '#ef4444',
+                        cursor: deleting === lead._id ? 'not-allowed' : 'pointer',
+                        padding: '8px',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (deleting !== lead._id) {
+                          e.currentTarget.style.background = '#fef2f2';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                      }}
+                      title="Delete lead"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </td>
                 </tr>
               ))}
