@@ -4,10 +4,13 @@ import { CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 const LeadsTable = ({ leads, filter, onFilterChange, onDelete }) => {
   const [deleting, setDeleting] = useState(null);
 
-  const filteredLeads = (leads || []).filter(lead => {
-    if (filter === 'all') return true;
-    return lead.status === filter;
-  });
+ const filteredLeads = Array.isArray(leads) 
+  ? leads.filter(lead => {
+      if (filter === 'all') return true;
+      return lead.status === filter;
+    })
+  : [];
+
 
   const handleDelete = async (leadId, leadName) => {
     if (!window.confirm(`Are you sure you want to delete "${leadName}"?`)) return;
