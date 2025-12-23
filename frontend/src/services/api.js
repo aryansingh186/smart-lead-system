@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Vite env variable
 const API_URL = import.meta.env.VITE_API_URL || "https://smart-lead-system-five.vercel.app";
 
 const api = axios.create({
@@ -11,17 +10,17 @@ const api = axios.create({
 });
 
 export const processBatch = async (names) => {
-  const response = await api.post("/process", { names });
+  const response = await api.post("/api/process", { names });
   return response.data;
 };
 
 export const getAllLeads = async (status = "") => {
-  const response = await api.get(`/leads${status ? `?status=${status}` : ""}`);
+  const response = await api.get(`/api/leads${status ? `?status=${status}` : ""}`);
   return response.data;
 };
 
 export const getStats = async () => {
-  const response = await api.get("/stats");
+  const response = await api.get("/api/stats");
   return response.data;
 };
 

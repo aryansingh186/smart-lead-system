@@ -7,11 +7,12 @@ const syncJob = require('./jobs/syncJob');
 
 const app = express();
 
-// Allow your frontend URLs (removed trailing slash)
+// CORS fix - frontend URL add karo
 app.use(cors({
   origin: [
     'http://localhost:5174',
-    'https://smart-lead-system-five.vercel.app'
+    'http://localhost:3000',
+    'https://smart-lead-system-qgya.vercel.app'
   ],
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS']
