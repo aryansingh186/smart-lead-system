@@ -23,7 +23,7 @@ const LeadInput = ({ onSubmit, loading }) => {
       <textarea
         value={names}
         onChange={(e) => setNames(e.target.value)}
-        placeholder="Enter names separated by commas (e.g., Peter, Aditi, Ravi, Satoshi)"
+        placeholder="Please enter names (e.g., Peter, Aditi, Ravi, Satoshi)"
         style={{
           width: '100%',
           padding: '15px',
