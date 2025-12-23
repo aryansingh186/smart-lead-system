@@ -11,7 +11,7 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://smart-lead-system-five.vercel.app'
+    'https://smart-lead-system-qgya.vercel.app/'
   ],
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS']
