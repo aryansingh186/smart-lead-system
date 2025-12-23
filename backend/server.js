@@ -7,11 +7,11 @@ const syncJob = require('./jobs/syncJob');
 
 const app = express();
 
-//  Allow your frontend URLs
+// Allow your frontend URLs (removed trailing slash)
 app.use(cors({
   origin: [
-    'http://localhost:3000',
-    'https://smart-lead-system-qgya.vercel.app/'
+    'http://localhost:5174',
+    'https://smart-lead-system-five.vercel.app'
   ],
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS']
@@ -42,11 +42,11 @@ app.get('/', (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(` Server running on port ${PORT}`);
-  console.log(` URL: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🔗 URL: http://localhost:${PORT}`);
   // Start background job
   syncJob.start();
 });
 
-//  Export for serverless platforms (Vercel)
+// Export for serverless platforms (Vercel)
 module.exports = app;
